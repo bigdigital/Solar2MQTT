@@ -43,19 +43,20 @@ private:
                                                                                                          
          {202, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_AC_In_Voltage},
          {203, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_TWO_DECIMAL, DESCR_AC_In_Frequenz}, 
+         {204, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_Input_Power}, 
         {205, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_AC_Out_Voltage},
         {206, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Output_current},
         {207, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_TWO_DECIMAL, DESCR_AC_Out_Frequenz},
         {208, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_Output_power},
-        {209, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, "Inverter_Charging_Power"},
-        {210, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, "Outpu_Effective_Voltage"},
-        {211, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, "Output_Effective_Current"},
-        {212, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_TWO_DECIMAL, "Output_Frequency"},
+        {209, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_Inverter_Charging_Power},
+        {210, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_AC_Out_Effective_Voltage},
+        {211, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Output_effective_current},
+        {212, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_TWO_DECIMAL, DESCR_AC_Out_Frequenz},
         {213, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_AC_Out_Rating_Active_Power},
         {214, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_AC_Out_Rating_Apparent_Power}, 
-        {215, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Battery_Voltage},     
-        {216, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, "Battery_Current"},
-        {217, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, "Battery_Power"},
+        {215, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Battery_avg_Voltage},     
+        {216, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Battery_avg_Current},
+        {217, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_Battery_avg_Power},
         {219, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_PV_Input_Voltage},
         {220, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_PV_Input_Current},
         {223, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_PV_Input_Power},
@@ -65,8 +66,8 @@ private:
         {227, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16, DESCR_Inverter_Temperature},
         {229, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_Battery_Percent},
         {232, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Charge_Average_Current},
-        {233, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, "Inverter_Charging_Current"},
-        {234, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, "PV_Charging_Current"},
+        {233, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_Inverter_avg_Charge_Current},
+        {234, MODBUS_TYPE_HOLDING, REGISTER_TYPE_INT16_ONE_DECIMAL, DESCR_PV_Charging_avg_Power},
     };
 
     inline static const modbus_register_t registers_static[] = { 
@@ -86,11 +87,11 @@ private:
                                                                                 }}},
         {302, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_Input_Voltage_Range, 0, {.bitfield = {
             "Wide", "Narrow"}}},
-        {303, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, "Buzzer Mode", 0, {.bitfield = {
+        {303, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_Buzzer_Enabled, 0, {.bitfield = {
             "Mute", "Warning", "Fault", "Fault Only"}}},
-        {305, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, "LCD Backlight", 0, {.bitfield = {
+        {305, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_LCD_Backlight_Enabled, 0, {.bitfield = {
             "Timed Off", "Always On"}}},
-        {306, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, "LCD Return to Homepage", 0, {.bitfield = {
+        {306, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_LCD_Reset_To_Default_Enabled, 0, {.bitfield = {
             "Do Not Return", "Return After 1 Minute"}}},
         {307, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_Power_Saving_Enabled, 0, {.bitfield = {
             "Off", "On"}}},
@@ -102,6 +103,11 @@ private:
             "AGM", "FLD", "USER", "SMK1", "PYL", "FOX"}}},
         {320, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_AC_output_voltage},
         {321, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_TWO_DECIMAL, DESCR_AC_output_frequency},
+        {324, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_Battery_Bulk_Voltage},
+        {325, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_Battery_Float_Voltage},
+        {327, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_Battery_Under_Voltage},
+        {331, MODBUS_TYPE_HOLDING, REGISTER_TYPE_U16, DESCR_Charger_Source_Priority, 0, {.bitfield = {
+            "Utility", "PV priority", "PV is at the same level as the Utility", "Only PV charging is allowed"}}},
         {332, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_Current_Max_Charging_Current},
         {333, MODBUS_TYPE_HOLDING, REGISTER_TYPE_DIEMATIC_ONE_DECIMAL, DESCR_Current_Max_AC_Charging_Current},
 

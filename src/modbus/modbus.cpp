@@ -129,9 +129,29 @@ void MODBUS::callback(std::function<void()> func)
 
 String MODBUS::requestData(String command)
 {
+    DynamicJsonDocument doc(256); 
+    DeserializationError error = deserializeJson(doc, command);
+    writeLog("JSON parse");
+    if (!error) {
+    uint16_t registerAddress = static_cast<uint16_t>(doc["register"].as<int>());
+    float value = doc["value"].as<float>();
+    float unit = doc["unit"].as<float>(); 
+    writeLog("Parsed JSON: Register=%d, Value=%.2f, Unit=%.2f", registerAddress, value, unit);
+    uint16_t scaledValue = static_cast<uint16_t>(value / unit);
+        if (_mCom.writeRegister(registerAddress, scaledValue)) {
+            writeLog("Modbus write successful(mqtt): Register %d, Value %d", registerAddress, scaledValue);
+            return "ok";
+        } else {
+            writeLog("Modbus write failed(mqtt): Register %d, Value %d", registerAddress, scaledValue);
+            return "error - Modbus write failed";
+        }
+    } else {
+        writeLog("JSON parse error: %s", command.c_str());
+        return "error - JSON parse error";
+    }
     requestStaticData = true;
     return "";
-}
+} 
 
 //----------------------------------------------------------------------
 // Private Functions

@@ -25,15 +25,19 @@ bool MustPV_PH18::retrieveModel(MODBUS_COM &mCom, char *modelBuffer, size_t buff
         .array_size = sizeof(registers_device_model) / sizeof(modbus_register_t),
         .curr_register = 0};
  
-    mCom.parseModbusToJson(model_info, false);
-    if (mCom.isAllRegistersRead(model_info))
-    {
-        const char *modelHigh = doc[DEVICE_MODEL_HIGH];
-        int modelLow = doc[DEVICE_MODEL_LOW];
-        snprintf(modelBuffer, bufferSize, "%s%d", modelHigh, modelLow);
-        return true;
+
+    for (size_t i = 0; i < 2; i++)
+    { 
+        mCom.parseModbusToJson(model_info, false);
+        if (mCom.isAllRegistersRead(model_info))
+        {
+            const char *modelHigh = doc[DEVICE_MODEL_HIGH];
+            int modelLow = doc[DEVICE_MODEL_LOW];
+            snprintf(modelBuffer, bufferSize, "%s%d", modelHigh, modelLow);
+            return true;
+        } 
+       delay(50);
     }
-    delay(50); 
     return false;
 }
 

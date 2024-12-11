@@ -388,3 +388,34 @@ String MODBUS_COM::convertRegistersToASCII(uint16_t* registers, size_t count) {
 
     return result;
 }
+
+void MODBUS_COM::sendDataToModbus(uint16_t registerAddress, uint16_t *data, size_t dataSize) {
+    _mb.clearTransmitBuffer();
+	
+  // Set the transmit buffer for Modbus write
+  for (size_t i = 0; i < dataSize; i++) {
+    _mb.setTransmitBuffer(i * 2, data[i]);  // Modbus stores data in registers (16-bit), so use i*2
+  }
+
+  // Send the data to the Modbus slave (writing to the specified register)
+  uint8_t result = _mb.writeMultipleRegisters(registerAddress, dataSize);  // Writing to the register
+
+  // Check if transmission was successful
+  if (getModbusResultMsg(result)) {
+    writeLog("Data transmitted successfully");
+  }  
+}
+
+void MODBUS_COM::fetchDataFromModbus(uint16_t registerAddress, size_t dataSize) {
+  // Read holding registers from the Modbus slave
+  uint8_t result = _mb.readHoldingRegisters(registerAddress, dataSize);
+
+  // Check if the read was successful
+  bool is_received = getModbusResultMsg(result);
+  if (is_received){
+    writeLog("Data fetched successfully!"); 
+    for (size_t i = 0; i < dataSize; i++) { 
+      writeLog( String(_mb.getResponseBuffer(i), HEX).c_str());  // Print in decimal
+    }
+  }
+}

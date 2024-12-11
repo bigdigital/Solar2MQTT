@@ -75,6 +75,7 @@ private:
     byte qexCounter = 0;
 
     void prepareRegisters(); 
+    bool parseCommand(const String &input, uint16_t &registerAddress, uint16_t *data, size_t &dataSize, bool &isGetCommand);
 
     /**
      * @brief Serial interface used for communication

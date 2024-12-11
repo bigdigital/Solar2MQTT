@@ -29,7 +29,7 @@ bool Anenji::retrieveModel(MODBUS_COM &mCom, char *modelBuffer, size_t bufferSiz
             }
 
             serialCode = mCom.convertRegistersToASCII(registers, 12);
-            Serial.println("Serial Code: " + serialCode);
+            writeLog("Serial Code: %s", serialCode);
         }
         snprintf(modelBuffer, bufferSize, "%s %s", getName(), serialCode.c_str());
         return true;
